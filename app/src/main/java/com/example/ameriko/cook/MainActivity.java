@@ -1,6 +1,5 @@
 package com.example.ameriko.cook;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public final String TAG = "MainActivity LOG";
     private static final int REQUEST_CODE = 1234;
 
-    ProgressDialog progress;
+    //ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +52,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             LocalOpenCV loader = new LocalOpenCV(this,this,this);
         }
 
+        /*
         progress=new ProgressDialog(this);
         progress.setMessage("Caricamento...");
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progress.setCancelable(false);
+        */
 
        /*
        //è un tasto in più che compare nello schermo
@@ -225,22 +226,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //richiamato dal metodo precedente - una volta acquisita la parola pronunciata, questo metodo contatta il server per richiedere se esiste la ricetta
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        progress.show();
+        //progress.show();
         Log.i(TAG,"onActivityResult 1");
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK)
         {
             // Populate the wordsList with the String values the recognition engine thought it heard
             final ArrayList<String> matches = data.getStringArrayListExtra(
                     RecognizerIntent.EXTRA_RESULTS);
-            Log.i(TAG,"onActivityResult 2");
+            Log.i(TAG,"onActivityResult 2 "+matches.get(0));
             //-----------qui ho la stringa che ha detto l'utente in matches.get(0) --inizio volley
-            String URL = "http://amerchri.altervista.org/Cook/ricettaPresente.php?ricetta="+matches.get(0);
+            String URL = "http://amerchri.altervista.org/Cook/ricettaImg.php?ricetta="+matches.get(0);
 
             StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            progress.cancel();
+                            //progress.cancel();
 
                             Log.i("Log","onActivityResult 3  Risposta Server:"+response.toString());
 
@@ -251,6 +252,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                                     Intent intent = new Intent(getApplicationContext(), RicettaActivity.class);
                                     intent.putExtra("ricetta", "" + matches.get(0));
+                                    intent.putExtra("img",tmp.getString("img"));
                                     startActivity(intent);
                                     //Toast.makeText(MainActivity.this, "Ricetta presente!", Toast.LENGTH_SHORT).show();
                                 } else {
@@ -267,7 +269,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            progress.cancel();
+                            //progress.cancel();
                             Toast.makeText(MainActivity.this, "Errore dal server:"+error.toString(), Toast.LENGTH_SHORT).show();
                             Log.i(TAG,"onActivityResult 4  Errore nel comunicare con il Server:"+error.toString());
                         }
@@ -286,9 +288,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         //----------fine volley
-
-
-
         else{
             Toast.makeText(MainActivity.this, "Mi spiace..Non ho capito cosa hai detto..Riprova!", Toast.LENGTH_SHORT).show();
         }
