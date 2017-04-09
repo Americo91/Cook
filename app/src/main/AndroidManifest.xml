@@ -23,6 +23,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".RicettaActivity"></activity>
+        <activity android:name=".InfoActivity" android:parentActivityName=".MainActivity"></activity>
     </application>
 
 </manifest>

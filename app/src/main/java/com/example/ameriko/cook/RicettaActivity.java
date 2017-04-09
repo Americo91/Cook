@@ -40,9 +40,8 @@ public class RicettaActivity extends AppCompatActivity implements CameraGestureS
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ricetta);
 
-        textView = (TextView)findViewById(R.id.textView);
-        textView.setText("ISTRUZIONI: Sposta la mano verso l'alto per tornare alla home - Sposta la mano verso sinistra per proseguire nella ricetta!");
-        textView2 = (TextView)findViewById(R.id.textView2);
+        textView = (TextView)findViewById(R.id.istrizioniRicetta);
+        textView2 = (TextView)findViewById(R.id.ricetta);
 
         imageView = (ImageView) findViewById(R.id.imgRicetta);
 
@@ -83,11 +82,18 @@ public class RicettaActivity extends AppCompatActivity implements CameraGestureS
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+    }
 
     //richiamato per farsi passare dal server la prossima pagina
     public void contactServer(){
 
         //progress.show();
+        //if (numeroPagina > 0)   textView.setVisibility(View.INVISIBLE);
+
         String URL = "http://amerchri.altervista.org/Cook/ricetta.php?ricetta="+ricetta.toString()+"&numeroPagina="+(numeroPagina+1);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,
@@ -97,7 +103,6 @@ public class RicettaActivity extends AppCompatActivity implements CameraGestureS
                         //progress.cancel();
 
                         Log.i("RicettaActivity","contactServer()  Risposta Server:"+response.toString());
-
 
                         try {
                         JSONObject tmp = null;
@@ -112,7 +117,8 @@ public class RicettaActivity extends AppCompatActivity implements CameraGestureS
                             Log.i("RicettaActivity","3 contactServer()  Risposta Server:"+response.toString());
 
                             numeroPagina++;
-                            textView2.setText(tmp.getString("testo"));
+                            String testoRicetta = "Ricetta:\n"+tmp.getString("testo");
+                            textView2.setText(testoRicetta);
                             Log.i("RicettaActivity","ricetta="+ricetta.toString()+"&numeroPagina="+(numeroPagina));
 
                         }else{
@@ -179,7 +185,8 @@ public class RicettaActivity extends AppCompatActivity implements CameraGestureS
                                 numeroPagina--;
 
                                 //Toast.makeText(RicettaActivity.this, tmp.getString("testo"), Toast.LENGTH_LONG).show();
-                                textView2.setText(tmp.getString("testo"));
+                                String testoRicetta = "Ricetta:\n"+tmp.getString("testo");
+                                textView2.setText(testoRicetta);
                                 Log.i("RicettaActivity","ricetta="+ricetta.toString()+"&numeroPagina="+(numeroPagina));
 
                             }else{
@@ -221,7 +228,7 @@ public class RicettaActivity extends AppCompatActivity implements CameraGestureS
     //metodi che gestiscono i gesture
     @Override
     public void onSensorClick(ClickSensor caller) {
-
+        finish();
     }
 
 
@@ -232,7 +239,7 @@ public class RicettaActivity extends AppCompatActivity implements CameraGestureS
             @Override
             public void run() {
                 Toast.makeText(RicettaActivity.this, "Ti sei mosso verso l'alto!", Toast.LENGTH_SHORT).show();
-                finish();
+
             }
         });
     }
@@ -253,7 +260,8 @@ public class RicettaActivity extends AppCompatActivity implements CameraGestureS
             @Override
             public void run() {
                 Toast.makeText(RicettaActivity.this, "Ti sei mosso verso sinistra!", Toast.LENGTH_SHORT).show();
-                contactServer();
+                if(numeroPagina!=1)
+                    contactServerBack();
             }
         });
     }
@@ -264,8 +272,8 @@ public class RicettaActivity extends AppCompatActivity implements CameraGestureS
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(RicettaActivity.this, "Ti sei mosso verso sinistra!", Toast.LENGTH_SHORT).show();
-                contactServerBack();
+                Toast.makeText(RicettaActivity.this, "Ti sei mosso verso destra!", Toast.LENGTH_SHORT).show();
+                contactServer();
             }
         });
 

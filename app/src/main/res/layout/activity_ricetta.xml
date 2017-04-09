@@ -14,28 +14,34 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            tools:layout_editor_absoluteX="200dp"
-            tools:layout_editor_absoluteY="-121dp"
-            android:layout_marginTop="62dp"
-            android:layout_below="@+id/textView2"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+    <TextView
+        android:id="@+id/ricetta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imgRicetta"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginStart="25dp"
+        android:text="Ricetta"
+        android:textIsSelectable="true"
+        android:textSize="14sp" />
 
-        <TextView
 
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            tools:layout_editor_absoluteX="-5dp"
-            tools:layout_editor_absoluteY="-148dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+    <TextView
+        android:id="@+id/istrizioniRicetta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Istruzioni:\nSposta la mano verso destra per proseguire nella ricetta e verso sinistra per tornare al passo precedente. Posiziona la mano sulla fotocamera per tornare alla home"
+        android:textStyle="italic"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginBottom="10dp"
+        />
+
 
 </RelativeLayout>

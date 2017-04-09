@@ -59,17 +59,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         progress.setCancelable(false);
         */
 
-       /*
-       //è un tasto in più che compare nello schermo
-       FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
-
 
         //riguarda il menù
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -130,21 +119,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        Intent intent = new Intent(getApplicationContext(), InfoActivity.class);
+        //intent.putExtra("ricetta", "" + matches.get(0));
+
 
         if (id == R.id.nav_ricette) {
             // Handle the camera action
-        } else if (id == R.id.nav_foto) {
-
+            intent.putExtra("infoType", "ricette");
         } else if (id == R.id.nav_istruzioni){
-
+            intent.putExtra("infoType", "istruzioni");
         } else if (id == R.id.nav_chisiamo) {
-
+            intent.putExtra("infoType", "chisiamo");
         } else if (id == R.id.nav_notelegali) {
+            intent.putExtra("infoType", "notelegali");
+        }else{
 
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+        startActivity(intent);
         return true;
     }
 
@@ -194,8 +188,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                //Toast.makeText(MainActivity.this, "Ti sei mosso verso destra!", Toast.LENGTH_SHORT).show();
-                speechStart(null);
+                Toast.makeText(MainActivity.this, "Ti sei mosso verso destra!", Toast.LENGTH_SHORT).show();
+                //speechStart(null);
             }
         });
     }
@@ -207,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void run() {
                 Toast.makeText(MainActivity.this, "CLICK!", Toast.LENGTH_SHORT).show();
+                speechStart(null);
             }
         });
     }
