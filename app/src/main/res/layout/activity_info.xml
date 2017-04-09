@@ -15,11 +15,20 @@
         android:layout_marginRight="2dp"
         android:id="@+id/recycler_view"
         android:clickable="true"
+        android:visibility="gone"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true">
 
     </android.support.v7.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/textViewInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="TextView"
+        />
 
 
 

@@ -1,12 +1,10 @@
 package com.example.ameriko.cook;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +18,6 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,8 +27,6 @@ public class InfoActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ArrayList<Ricetta> ricette;
     String infoType;
-    ProgressDialog progress;
-    ListView listView;
     TextView textView;
     private GridLayoutManager gridLayoutManager;
     private CustomAdapter adapter;
@@ -47,23 +42,13 @@ public class InfoActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         ricette = new ArrayList<>();
 
-
-        gridLayoutManager = new GridLayoutManager(this,1);
+        gridLayoutManager = new GridLayoutManager(this,2);
         recyclerView.setLayoutManager(gridLayoutManager);
 
-        adapter = new CustomAdapter(InfoActivity.this, ricette);
-        recyclerView.setAdapter(adapter);
-
-        //inizializzo la progressBar
-        progress=new ProgressDialog(this);
-        progress.setMessage("Caricamento...");
-        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progress.setCancelable(false);
 
         //controllo cosa ha cliccato l'utente dal menu della MainActivity
         if(infoType.toString().equals("ricette")){
             //Toast.makeText(InfoActivity.this, "Ricette!", Toast.LENGTH_LONG).show();
-            progress.show();
             contactServerRicette();
         }else if(infoType.toString().equals("istruzioni")){
             istruzioni();
@@ -120,7 +105,7 @@ public class InfoActivity extends AppCompatActivity {
 
     public void contactServerRicette(){
 
-        listView.setVisibility(ListView.VISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
 
         String URL = "http://amerchri.altervista.org/Cook/listaRicette2.php";
 
@@ -128,7 +113,6 @@ public class InfoActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        progress.cancel();
                         try {
                             JSONArray jsonArray = new JSONArray(response.toString());
 
@@ -148,6 +132,9 @@ public class InfoActivity extends AppCompatActivity {
                                     ricette.add(new Ricetta(id,nome,img));
                                 }
 
+                                adapter = new CustomAdapter(InfoActivity.this,ricette);
+                                recyclerView.setAdapter(adapter);
+
 
 
                             } else {
@@ -165,7 +152,6 @@ public class InfoActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        progress.cancel();
                         //Toast.makeText(MainActivity.this, "Errore dal server:"+error.toString(), Toast.LENGTH_SHORT).show();
                         //Log.i(TAG,"onActivityResult 4  Errore nel comunicare con il Server:"+error.toString());
                     }
