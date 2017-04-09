@@ -3,8 +3,9 @@ package com.example.ameriko.cook;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,16 +18,23 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class InfoActivity extends AppCompatActivity {
 
+    private RecyclerView recyclerView;
+    private ArrayList<Ricetta> ricette;
     String infoType;
     ProgressDialog progress;
     ListView listView;
     TextView textView;
+    private GridLayoutManager gridLayoutManager;
+    private CustomAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +44,15 @@ public class InfoActivity extends AppCompatActivity {
         Bundle dati = getIntent().getExtras();
         infoType = dati.getString("infoType");
 
-        listView = (ListView)findViewById(R.id.listViewRicette);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        ricette = new ArrayList<>();
+
+
+        gridLayoutManager = new GridLayoutManager(this,1);
+        recyclerView.setLayoutManager(gridLayoutManager);
+
+        adapter = new CustomAdapter(InfoActivity.this, ricette);
+        recyclerView.setAdapter(adapter);
 
         //inizializzo la progressBar
         progress=new ProgressDialog(this);
@@ -106,7 +122,7 @@ public class InfoActivity extends AppCompatActivity {
 
         listView.setVisibility(ListView.VISIBLE);
 
-        String URL = "http://amerchri.altervista.org/Cook/listaRicette.php";
+        String URL = "http://amerchri.altervista.org/Cook/listaRicette2.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,
                 new Response.Listener<String>() {
@@ -118,14 +134,21 @@ public class InfoActivity extends AppCompatActivity {
 
 
                             if (jsonArray.length() > 0) {
-                                String[] arrayRicette = new String[jsonArray.length()];
+                                ArrayList<Ricetta> ricette = new ArrayList<>();
+
                                 //adesso inizializzo l'array con tutte le ricette (l'array serve per l'Array Adapter)
                                 for(int i=0;i<jsonArray.length();i++) {
-                                    arrayRicette[i] = jsonArray.getString(i);
+
+                                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                                    int id = jsonObject.getInt("id");
+                                    String nome = jsonObject.getString("nome");
+                                    String img = jsonObject.getString("img");
+
+                                    ricette.add(new Ricetta(id,nome,img));
                                 }
-                                //creo l'ArrayAdapter per la listView
-                                ArrayAdapter<String> adapter=new ArrayAdapter<String>(InfoActivity.this, R.layout.row,arrayRicette);
-                                listView.setAdapter(adapter);
+
+
 
                             } else {
                                 Toast.makeText(InfoActivity.this, "Non ci sono ricette!", Toast.LENGTH_LONG).show();

@@ -85,7 +85,9 @@ public class RicettaActivity extends AppCompatActivity implements CameraGestureS
     @Override
     protected void onPause() {
         super.onPause();
-
+        Log.i("PAUSA","PAUSARicetta");
+        LocalOpenCV loader = new LocalOpenCV(this, this, this);
+        loader.getmGestureSensor().stop();
     }
 
     //richiamato per farsi passare dal server la prossima pagina

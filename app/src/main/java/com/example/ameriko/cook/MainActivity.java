@@ -92,6 +92,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.i("PAUSA","PAUSAMain");
+        LocalOpenCV loader = new LocalOpenCV(this, this, this);
+        loader.getmGestureSensor().stop();
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
